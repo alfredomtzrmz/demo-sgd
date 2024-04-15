@@ -4,7 +4,7 @@ export interface newDocumentForm {
   provider_name: string;
   register_date: Date;
   file_path: string;
-  file?: File;
+  file: File;
   created_at: string;
 }
 

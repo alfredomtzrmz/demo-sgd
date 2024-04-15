@@ -47,7 +47,7 @@ async function onHandleSubmit(payload: Document) {
 async function createDocument(document: Document) {
   try {
     let formData = new FormData();
-    formData.append('file', document.file ? document.file : '');
+    formData.append('file', document.file);
     await DocumentService.createDocument(document);
     snackbar.setSnackbar('Documento creado correctamente.', 'green');
   } catch (error) {

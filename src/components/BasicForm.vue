@@ -45,7 +45,6 @@
             variant="underlined"
             prepend-icon=""
             density="comfortable"
-            placeholder="jshajksasa"
             accept=".pdf"
             v-model="file.value.value"
           />
@@ -117,7 +116,7 @@ const { handleSubmit } = useForm({
     description: localModel.value.description,
     provider_name: localModel.value.provider_name,
     register_date: localModel.value.register_date,
-    file: localModel.value.file_path,
+    file: null,
   },
 });
 
