@@ -106,7 +106,10 @@ const localModel = ref(props.document);
 const schema = yup.object({
   title: yup.string().required('El titulo es requerido.'),
   provider_name: yup.string().required('El proveedor es requerido.'),
-  register_date: yup.date().required('La fecha de creación es requerida.'),
+  register_date: yup
+    .date()
+    .required('La fecha de creación es requerida.')
+    .typeError('La fecha de creación es requerida.'),
 });
 
 const { handleSubmit } = useForm({
