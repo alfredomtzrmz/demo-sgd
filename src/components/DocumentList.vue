@@ -38,7 +38,7 @@
           <DocumentCard
             :document="document"
             @edit="onEdit"
-            @delete="onDelete"
+            @delete="onDelete(document)"
             @download="onDownload"
           />
         </VCol>
@@ -52,6 +52,16 @@
       density="comfortable"
       @update:model-value="onPageChange"
       class="mt-4"
+    />
+    <BaseModal
+      title="¿Deseas borrar el documento?"
+      text="Este proceso no se puede deshacer. Perderás el acceso al documento y toda la información asociada."
+      prepend-icon="mdi-alert"
+      main-btn-color="red"
+      :is-loading="deletingDocument"
+      v-model="showModal"
+      @confirm="onConfirm"
+      @dismiss="showModal = false"
     />
   </div>
 </template>
@@ -81,6 +91,9 @@ const totalPages = ref(0);
 const isFetching = ref(false);
 const querySearch = ref('');
 const baseURL = import.meta.env.VITE_SERVER_URL;
+const deletingDocument = ref(false);
+const documentSelected = ref({} as Document);
+const showModal = ref(false);
 
 watch(querySearch, (newValue, oldValue) => {
   if (newValue !== oldValue) {
@@ -122,13 +135,26 @@ async function onEdit(document: Document) {
   await router.push(`/documents/edit/${document.id}`);
 }
 
-async function onDelete(document: Document) {
+function onDelete(document: Document) {
+  documentSelected.value = document;
+  showModal.value = true;
+}
+
+async function onConfirm() {
+  await deleteDocument(documentSelected.value);
+}
+
+async function deleteDocument(document: Document) {
   try {
+    deletingDocument.value = true;
     await DocumentService.deleteDocument(document.id);
+    showModal.value = false;
     await getDocuments();
-    snackbar.setSnackbar('Document eliminado', 'indigo-lighten-1');
+    snackbar.setSnackbar('Documento eliminado', 'indigo-lighten-1');
   } catch (error) {
     snackbar.setSnackbar('Error al eliminar el documento.', 'red');
+  } finally {
+    deletingDocument.value = false;
   }
 }
 

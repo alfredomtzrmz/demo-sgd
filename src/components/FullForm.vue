@@ -36,7 +36,6 @@ async function onHandleSubmit(payload: Document) {
     } else {
       await createDocument(payload);
     }
-    await router.push('/documents');
   } catch (error) {
     snackbar.setSnackbar('Error', 'red');
   } finally {
@@ -49,6 +48,7 @@ async function createDocument(document: Document) {
     let formData = new FormData();
     formData.append('file', document.file);
     await DocumentService.createDocument(document);
+    await router.push('/documents');
     snackbar.setSnackbar('Documento creado correctamente.', 'green');
   } catch (error) {
     snackbar.setSnackbar('Error al crear el documento.', 'red');
@@ -60,9 +60,10 @@ async function updateDocument(document: Document) {
     let formData = new FormData();
     formData.append('file', document.file ? document.file : '');
     await DocumentService.updateDocument(document, props.document.id);
-    snackbar.setSnackbar('Document updated successfully', 'green');
+    await router.push('/documents');
+    snackbar.setSnackbar('Documento actualizado correctamente.', 'green');
   } catch (error) {
-    snackbar.setSnackbar('Error al crear el documento.', 'red');
+    snackbar.setSnackbar('Error al actualizar el documento.', 'red');
   }
 }
 </script>
